@@ -1,34 +1,27 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, reactive, watch } from "vue";
 
 let getTaco = ref(true);
 const question = ref("");
 
-function getTacoClick() {
+const state = reactive({
+  newComment: "",
+  comments: ["Taco comment 1!", "Taco comment 2!", "Taco comment 3!"],
+});
+
+function addTacoClick() {
   console.log("clicked");
-  getTaco.value = !getTaco.value;
+  state.comments.push(state.newComment);
+  state.newComment = "";
 }
-
-// watch works directly on a ref
-watch(getTaco, async (newQuestion, oldQuestion) => {
-  console.log(oldQuestion);
-  console.log("getTaco watcher");
-  console.log(newQuestion);
-});
-
-// watch works directly on a ref
-watch(question, async (newQuestion, oldQuestion) => {
-  console.log(oldQuestion);
-  console.log("question watcher");
-  console.log(newQuestion);
-});
 </script>
 
 <template>
   <div>
-    <button @click="getTacoClick">Click me to order a taco</button>
-    <h2>Where is my taco...</h2>
+    <h2>Taco comments</h2>
   </div>
 
-  <input v-model="question" />
+  <input v-model="state.newComment" />
+  <button @click="addTacoClick">Add comment</button>
+  <li v-for="item in state.comments" v-text="item" :key="item"></li>
 </template>
